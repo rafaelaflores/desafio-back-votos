@@ -10,10 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/v1/associados")
@@ -36,5 +35,11 @@ public class AssociadoController {
             LOG.error("Houve um erro ao fazer o cadastro: " + exception.getMessage());
             return ResponseEntity.badRequest().build();
         }
+    }
+
+    @GetMapping
+    public ResponseEntity<?> listarAssociados() {
+        List<AssociadoDTO> associados = associadoService.listarAssociados();
+        return ResponseEntity.status(HttpStatus.OK).body(associados);
     }
 }

@@ -7,6 +7,9 @@ import br.com.southsystem.assembleia.repository.AssociadoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 public class AssociadoService {
     @Autowired
@@ -27,5 +30,13 @@ public class AssociadoService {
         associadoDTO.setCpf(associadoRegistrado.getCpf());
 
         return associadoDTO;
+    }
+
+    public List<AssociadoDTO> listarAssociados() {
+        List<Associado> associadosRegistrados = associadoRepository.findAll();
+
+        return associadosRegistrados.stream().map(associado -> {
+            return new AssociadoDTO(associado.getId(), associado.getNome(), associado.getCpf());
+        }).collect(Collectors.toList());
     }
 }
