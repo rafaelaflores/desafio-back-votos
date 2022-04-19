@@ -17,6 +17,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("v1/pautas")
@@ -68,5 +69,14 @@ public class PautaController {
     public ResponseEntity<?> listarPautas() {
         List<PautaDTO> pautas = pautaService.listarPautas();
         return ResponseEntity.status(HttpStatus.OK).body(pautas);
+    }
+
+    @GetMapping(path = "/{idPauta}")
+    public ResponseEntity<?> buscarPauta(@PathVariable Long idPauta) {
+        Optional<PautaDTO> optionalPautaDTO = pautaService.buscarPauta(idPauta);
+        if(optionalPautaDTO.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(optionalPautaDTO.get());
     }
 }

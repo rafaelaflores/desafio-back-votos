@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -36,11 +37,6 @@ public class PautaService {
         return pautaDTO;
     }
 
-    public List<PautaDTO> listarPautas() {
-        List<Pauta> pautasRegistradas = pautaRepository.findAll();
-        return pautasRegistradas.stream().map(this::getPautaDTO).collect(Collectors.toList());
-    }
-
     //esse método foi criado para estruturar o objeto de pauta, caso haja ou não uma sessão aberta
     private PautaDTO getPautaDTO(Pauta pauta) {
         PautaDTO pautaDTO;
@@ -63,4 +59,23 @@ public class PautaService {
         }
         return pautaDTO;
     }
+
+    public List<PautaDTO> listarPautas() {
+        List<Pauta> pautasRegistradas = pautaRepository.findAll();
+        return pautasRegistradas.stream().map(this::getPautaDTO).collect(Collectors.toList());
+    }
+
+    public Optional<PautaDTO> buscarPauta(Long id) {
+        Optional<Pauta> optionalPauta = pautaRepository.findById(id);
+        Optional<PautaDTO> optionalPautaDTO;
+        if (optionalPauta.isPresent()) {
+            Pauta pauta = optionalPauta.get();
+            PautaDTO pautaDTO = getPautaDTO(pauta);
+            optionalPautaDTO = Optional.of(pautaDTO);
+        } else {
+            optionalPautaDTO = Optional.empty();
+        }
+        return optionalPautaDTO;
+    }
+
 }
