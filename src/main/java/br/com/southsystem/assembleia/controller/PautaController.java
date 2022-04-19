@@ -16,6 +16,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("v1/pautas")
 public class PautaController {
@@ -60,5 +62,11 @@ public class PautaController {
             LOG.error(mensagem);
             return new ResponseEntity<Error>(HttpStatus.CONFLICT);
         }
+    }
+
+    @GetMapping
+    public ResponseEntity<?> listarPautas() {
+        List<PautaDTO> pautas = pautaService.listarPautas();
+        return ResponseEntity.status(HttpStatus.OK).body(pautas);
     }
 }

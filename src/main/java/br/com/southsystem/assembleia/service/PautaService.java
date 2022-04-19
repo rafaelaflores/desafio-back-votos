@@ -10,7 +10,9 @@ import br.com.southsystem.assembleia.repository.PautaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Service
 public class PautaService {
@@ -32,6 +34,11 @@ public class PautaService {
         pautaDTO.setDescricao(pautaRegistrada.getDescricao());
 
         return pautaDTO;
+    }
+
+    public List<PautaDTO> listarPautas() {
+        List<Pauta> pautasRegistradas = pautaRepository.findAll();
+        return pautasRegistradas.stream().map(this::getPautaDTO).collect(Collectors.toList());
     }
 
     //esse método foi criado para estruturar o objeto de pauta, caso haja ou não uma sessão aberta
