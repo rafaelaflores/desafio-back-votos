@@ -6,6 +6,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.io.Serializable;
+import java.time.LocalDateTime;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -13,18 +15,19 @@ import javax.persistence.*;
 @Setter
 @Entity
 @Table
-public class Pauta {
+public class Sessao implements Serializable {
     @Id
     @Column
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, unique = true, length = 50)
-    private String titulo;
+    @Column(nullable = false)
+    private LocalDateTime inicioSessao;
 
-    @Column(nullable = false, length = 150)
-    private String descricao;
+    @Column(nullable = false)
+    private LocalDateTime finalSessao;
 
-    @OneToOne(mappedBy = "pauta")
-    private Sessao sessao;
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "pauta_id")
+    private Pauta pauta;
 }
