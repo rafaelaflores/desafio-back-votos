@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -27,4 +28,7 @@ public class Pauta {
 
     @OneToOne(mappedBy = "pauta")
     private Sessao sessao;
+
+    @OneToMany(mappedBy = "pauta")
+    private List<Voto> voto;
 }

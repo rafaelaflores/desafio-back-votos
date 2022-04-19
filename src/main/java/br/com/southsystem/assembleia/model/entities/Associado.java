@@ -7,6 +7,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
@@ -24,4 +26,7 @@ public class Associado {
 
     @Column(nullable = false, unique = true, length = 11)
     private String cpf;
+
+    @OneToMany(mappedBy = "associado")
+    private List<Voto> voto;
 }
