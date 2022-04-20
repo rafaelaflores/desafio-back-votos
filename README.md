@@ -21,7 +21,7 @@ Afim de manter o código menos verboso, foi utilizado o framework Lombok.
 
 Foi utilizada a api externa https://user-info.herokuapp.com/users/{cpf} para verificação do CPF dos associados, por meio do RestTemplate do Java.
 
-O versionamento da api foi feito através do path, inserindo o número da versão que foi desenvolvida no início da URL, por exemplo: http://localhost:8080/v1/pautas
+O versionamento da api foi feito através do path, inserindo o número da versão que foi desenvolvida no início da URL, por exemplo: http://localhost:8080/api/v1/pautas
 
 Além disso, para a documentação da API foi utilizado o Swagger. Disponível em: http://localhost:8080/api/swagger-ui.html
 
