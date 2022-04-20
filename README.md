@@ -29,7 +29,7 @@ Além disso, para a documentação da API foi utilizado o Swagger. Disponível e
 
 Utilizando docker para subir os containers:
 ```
-$ docker-compose up
+$ docker-compose up -d
 ```
 
 Executando o projeto por meio do Maven:
@@ -38,7 +38,7 @@ $ ./mvnw install
 $ ./mvnw spring-boot:run
 ```
 ## 👩‍🚀 Endpoints
-###Pautas
+### Pautas
 
 Criar pauta
 ```
@@ -60,7 +60,7 @@ Mostrar o resultado de uma sessão de votação a partir da pauta
 ```
 GET http://localhost:8080/api/v1/pauta/{idPauta}/resultados
 ```
-###Associados
+### Associados
 Cadastrar associado
 ```
 POST http://localhost:8080/api/v1/associados/
@@ -74,7 +74,7 @@ Listar associados
 GET http://localhost:8080/api/v1/associados/
 ```
 
-###Sessões
+### Sessões
 
 Abrir sessão de votação
 ```
@@ -84,7 +84,7 @@ POST http://localhost:8080/api/v1/pautas/{idPauta}/sessoes
 }
 ```
 
-###Votos
+### Votos
 Votar em uma pauta
 ```
 POST http://localhost:8080/api/v1/votos/
@@ -95,5 +95,5 @@ POST http://localhost:8080/api/v1/votos/
 }
 ```
 
-###Descrição do desafio
+### Descrição do desafio
 https://github.com/rh-southsystem/desafio-back-votos
