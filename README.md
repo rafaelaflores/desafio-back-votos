@@ -1,76 +1,99 @@
-# Desafio Técnico
+# DESAFIO TÉCNICO SICREDI #
 
-## Objetivo
+Nessa aplicação foi desenvolvido um sistema para Assembleias de Votação. No cooperativismo, muitas decisões são tomadas em assembleias, onde cada associado possui um voto por pauta em questão. A partir disso, essa solução permite gerenciar essas sessões de votação.
 
-No cooperativismo, cada associado possui um voto e as decisões são tomadas em assembleias, por votação. A partir disso,
-você precisa criar uma solução back-end para gerenciar essas sessões de votação. Essa solução deve ser executada na
-nuvem e promover as seguintes funcionalidades através de uma API REST:
 
-- Cadastrar uma nova pauta;
-- Abrir uma sessão de votação em uma pauta (a sessão de votação deve ficar aberta por um tempo determinado na chamada de
-  abertura ou 1 minuto por default);
-- Receber votos dos associados em pautas (os votos são apenas 'Sim'/'Não'. Cada associado é identificado por um id único
-  e pode votar apenas uma vez por pauta);
-- Contabilizar os votos e dar o resultado da votação na pauta.
+## 🚀 Funcionalidades
 
-Para fins de exercício, a segurança das interfaces pode ser abstraída e qualquer chamada para as interfaces pode ser
-considerada como autorizada. A escolha da linguagem, frameworks e bibliotecas é livre (desde que não infrinja direitos
-de uso).
+- Cadastrar uma pauta, buscar uma pauta por id e listar pautas cadastradas.
+- Cadastrar associados e listar associados.
+- Abrir uma sessão de votação em uma pauta. É possível ou não informar um valor de duração, se não informar a sessão fica aberta por 1 minuto.
+- O usuário deve fornecer o id da pauta e do associado para registrar um voto em uma sessão de votação. O voto deve ser igual a "true" ou "false".
+- Para registrar um voto os associados devem estar cadastrados com um CPF válido e aptos à votação (ABLE TO VOTE).
+- O resultado da votação é retornado através da pauta que o usuário consultar.
 
-É importante que as pautas e os votos sejam persistidos e que não sejam perdidos com o restart da aplicação.
+## 🔧 Ferramentas
+O desenvolvimento da API foi feito utilizando a versão 11 do Java, Maven versão 4.0.0, Spring Boot e banco de dados MySQL versão 8.
 
-### Tarefas bônus
+Para a criação de uma aplicação que execute na nuvem foi usado o Docker.
 
-As tarefas bônus não são obrigatórias, mas nos permitem avaliar outros conhecimentos que você possa ter.
+Afim de manter o código menos verboso, foi utilizado o framework Lombok.
 
-A gente sempre sugere que o candidato pondere e apresente até onde consegue fazer, considerando o seu nível de
-conhecimento e a qualidade da entrega.
+Foi utilizada a api externa https://user-info.herokuapp.com/users/{cpf} para verificação do CPF dos associados, por meio do RestTemplate do Java.
 
-#### Tarefa Bônus 1 - Integração com sistemas externos
+O versionamento da api foi feito através do path, inserindo o número da versão que foi desenvolvida no início da URL, por exemplo: http://localhost:8080/v1/pautas
 
-Integrar com um sistema que verifique, a partir do CPF do associado, se ele pode votar
+Além disso, para a documentação da API foi utilizado o Swagger. Disponível em: http://localhost:8080/api/swagger-ui.html
 
-- GET https://user-info.herokuapp.com/users/{cpf}
-- Caso o CPF seja inválido, a API retornará o HTTP Status 404 (Not found). Você pode usar geradores de CPF para gerar
-  CPFs válidos;
-- Caso o CPF seja válido, a API retornará se o usuário pode (ABLE_TO_VOTE) ou não pode (UNABLE_TO_VOTE) executar a
-  operação Exemplos de retorno do serviço
+## ⚙️ Utilização
 
-#### Tarefa Bônus 2 - Mensageria e filas
+Utilizando docker para subir os containers:
+```
+$ docker-compose up
+```
 
-Classificação da informação: Uso Interno O resultado da votação precisa ser informado para o restante da plataforma,
-isso deve ser feito preferencialmente através de mensageria. Quando a sessão de votação fechar, poste uma mensagem com o
-resultado da votação.
+Executando o projeto por meio do Maven:
+```
+$ ./mvnw install
+$ ./mvnw spring-boot:run
+```
+## 👩‍🚀 Endpoints
+###Pautas
 
-#### Tarefa Bônus 3 - Performance
+Criar pauta
+```
+POST http://localhost:8080/api/v1/pautas/
+{
+    "titulo": "exemplo",
+    "descricao" : "descricao exemplo"
+}
+```
+Listar pautas
+```
+GET http://localhost:8080/api/v1/pautas/
+```
+Retornar pauta por id
+```
+GET http://localhost:8080/api/v1/pauta/{idPauta}
+```
+Mostrar o resultado de uma sessão de votação a partir da pauta
+```
+GET http://localhost:8080/api/v1/pauta/{idPauta}/resultados
+```
+###Associados
+Cadastrar associado
+```
+POST http://localhost:8080/api/v1/associados/
+{
+    "nome": "exemplo",
+    "cpf" : "00000000000"
+}
+```
+Listar associados
+```
+GET http://localhost:8080/api/v1/associados/
+```
 
-Imagine que sua aplicação possa ser usada em cenários que existam centenas de milhares de votos. Ela deve se comportar
-de maneira performática nesses cenários;
+###Sessões
 
-- Testes de performance são uma boa maneira de garantir e observar como sua aplicação se comporta.
+Abrir sessão de votação
+```
+POST http://localhost:8080/api/v1/pautas/{idPauta}/sessoes
+{
+    "duracao": "30"
+}
+```
 
-#### Tarefa Bônus 4 - Versionamento da API
+###Votos
+Votar em uma pauta
+```
+POST http://localhost:8080/api/v1/votos/
+{
+    "voto": true,
+    "pauta_id" : "1",
+    "associado_id" : "1"
+}
+```
 
-Como você versionaria a API da sua aplicação? Que estratégia usar?
-
-### O que será analisado
-
-- Simplicidade no design da solução (evitar over engineering)
-- Organização do código
-- Arquitetura do projeto
-- Boas práticas de programação (manutenibilidade, legibilidade etc)
-- Possíveis bugs
-- Tratamento de erros e exceções
-- Explicação breve do porquê das escolhas tomadas durante o desenvolvimento da solução
-- Uso de testes automatizados e ferramentas de qualidade
-- Limpeza do código
-- Documentação do código e da API
-- Logs da aplicação
-- Mensagens e organização dos commits
-
-### Observações importantes
-
-- Não inicie o teste sem sanar todas as dúvidas
-- Iremos executar a aplicação para testá-la, cuide com qualquer dependência externa e deixe claro caso haja instruções
-  especiais para execução do mesmo
-- Teste bem sua solução, evite bugs
+###Descrição do desafio
+https://github.com/rh-southsystem/desafio-back-votos
