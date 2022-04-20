@@ -22,7 +22,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("v1/pautas")
+@RequestMapping("/v1/pautas")
 public class PautaController {
     @Autowired
     private PautaService pautaService;
