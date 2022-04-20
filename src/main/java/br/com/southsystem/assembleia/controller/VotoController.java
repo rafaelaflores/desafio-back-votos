@@ -26,7 +26,7 @@ public class VotoController {
     private static final Logger LOG = Logger.getLogger(AssembleiaApplication.class);
 
     @PostMapping
-    public ResponseEntity registrarVoto(@RequestBody VotoRequest votoRequest) {
+    public ResponseEntity<?> registrarVoto(@RequestBody VotoRequest votoRequest) {
         try {
             VotoDTO votoDTO = votoService.registrarVoto(votoRequest);
             LOG.info("Voto foi cadastrado(a)!\n");
