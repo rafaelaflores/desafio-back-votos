@@ -1,9 +1,11 @@
 package br.com.southsystem.assembleia.controller;
 
 import br.com.southsystem.assembleia.AssembleiaApplication;
+import br.com.southsystem.assembleia.exception.PautaException;
 import br.com.southsystem.assembleia.exception.SessaoIniciadaException;
 import br.com.southsystem.assembleia.model.ErroResponse;
 import br.com.southsystem.assembleia.model.pauta.dto.PautaDTO;
+import br.com.southsystem.assembleia.model.pauta.dto.PautaResultadoDTO;
 import br.com.southsystem.assembleia.model.pauta.request.PautaRequest;
 import br.com.southsystem.assembleia.model.sessao.dto.SessaoDTO;
 import br.com.southsystem.assembleia.model.sessao.request.SessaoRequest;
@@ -78,5 +80,18 @@ public class PautaController {
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(optionalPautaDTO.get());
+    }
+
+    @GetMapping("/{idPauta}/resultados")
+    public ResponseEntity<?> getResultado(@PathVariable Long idPauta) {
+        try {
+            PautaResultadoDTO pautaResultadoDTO = pautaService.getResultado(idPauta);
+            return ResponseEntity.status(HttpStatus.OK).body(pautaResultadoDTO);
+        } catch (PautaException pautaException) {
+            String mensagem = pautaException.getMessage();
+            ErroResponse erroResponse = new ErroResponse(mensagem, HttpStatus.BAD_REQUEST);
+            LOG.error(mensagem);
+            return ResponseEntity.badRequest().body(erroResponse);
+        }
     }
 }

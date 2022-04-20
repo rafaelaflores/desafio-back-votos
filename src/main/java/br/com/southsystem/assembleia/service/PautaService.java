@@ -1,12 +1,16 @@
 package br.com.southsystem.assembleia.service;
 
+import br.com.southsystem.assembleia.exception.PautaException;
 import br.com.southsystem.assembleia.model.entities.Pauta;
 import br.com.southsystem.assembleia.model.entities.Sessao;
+import br.com.southsystem.assembleia.model.entities.Voto;
 import br.com.southsystem.assembleia.model.pauta.dto.PautaDTO;
 import br.com.southsystem.assembleia.model.pauta.dto.PautaIniciadaDTO;
+import br.com.southsystem.assembleia.model.pauta.dto.PautaResultadoDTO;
 import br.com.southsystem.assembleia.model.pauta.request.PautaRequest;
 import br.com.southsystem.assembleia.model.sessao.dto.SessaoDTO;
 import br.com.southsystem.assembleia.repository.PautaRepository;
+import br.com.southsystem.assembleia.repository.VotoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +23,9 @@ import java.util.stream.Collectors;
 public class PautaService {
     @Autowired
     PautaRepository pautaRepository;
+
+    @Autowired
+    VotoRepository votoRepository;
 
     public PautaDTO cadastrarPauta(PautaRequest pautaRequest) {
         Pauta pauta = new Pauta();
@@ -78,4 +85,29 @@ public class PautaService {
         return optionalPautaDTO;
     }
 
+    public PautaResultadoDTO getResultado(Long id) {
+        Pauta pauta = new Pauta();
+        pauta.setId(id);
+
+        List<Voto> votosRegistrados = votoRepository.findVotoByPauta(pauta);
+
+        if(votosRegistrados.isEmpty()) {
+            throw new PautaException("Não há votos para a pauta em questão");
+        }
+
+        PautaResultadoDTO pautaResultadoDTO = new PautaResultadoDTO();
+
+        for(Voto voto: votosRegistrados) {
+            if(voto.isVoto()) {
+                pautaResultadoDTO.setSimVotos(pautaResultadoDTO.getSimVotos() + 1);
+            } else {
+                pautaResultadoDTO.setNaoVotos(pautaResultadoDTO.getNaoVotos() + 1);
+            }
+        }
+
+        pautaResultadoDTO.setTotalVotos(votosRegistrados.size());
+        pautaResultadoDTO.setPautaAprovada(pautaResultadoDTO.isPautaAprovada());
+
+        return pautaResultadoDTO;
+    }
 }
